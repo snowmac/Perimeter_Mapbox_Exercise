@@ -1,3 +1,7 @@
+# Note:
+
+I built this in a vanilla Ubuntu environment (New as of 3 days ago!) -- thus these are linux commands not mac os (Homebrew) or windows.
+
 # Install instructions 
 
 Assuming Ubuntu, run sudo apt to install a bunch of packages:
@@ -45,3 +49,7 @@ npx prisma migrate dev --name init
 ```
 
 This will create a database called mapbox then run all the migrations inside the 'public' schema which will create a few tables. 
+
+# Server
+
+TO run apollo run `npm start`.
