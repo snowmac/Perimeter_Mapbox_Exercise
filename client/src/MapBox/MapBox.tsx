@@ -5,6 +5,7 @@ import { polygonFactory } from './util';
 
 import 'mapbox-gl/dist/mapbox-gl.css';
 import '@mapbox/mapbox-gl-draw/dist/mapbox-gl-draw.css';
+import Controls from './Controls.tsx';
 
 const fakeOne = [[[-91.89339773559622,42.77310422996243],[-91.84086935424874,42.76264469821865],[-91.87708990478572,42.75306574667144],[-91.89339773559622,42.77310422996243]]];
 
@@ -53,20 +54,7 @@ const MapBox = () => {
   return (
     <>
       <div ref={mapContainerRef} id="map" style={{ height: '400px' }}></div>
-      <div
-        className="calculation-box"
-        style={{
-          height: 75,
-          width: 150,
-          position: 'absolute',
-          bottom: 40,
-          left: 10,
-          backgroundColor: 'rgba(255, 255, 255, 0.9)',
-          padding: 15,
-          textAlign: 'center'
-        }}
-      >
-      </div>
+      <Controls />
     </>
   );
 };
