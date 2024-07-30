@@ -13,6 +13,6 @@ export interface Feature {
 export interface Properties { }
 
 export interface Geometry {
-    coordinates: number[][][]
+    coordinates: number[][][] | any
     type: string
 }
