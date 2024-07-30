@@ -6,7 +6,6 @@ import { polygons } from '@utils/mockdata.ts';
 
 import 'mapbox-gl/dist/mapbox-gl.css';
 import '@mapbox/mapbox-gl-draw/dist/mapbox-gl-draw.css';
-import Controls from '../Controls/Controls.tsx';
 
 
 const MapBox = () => {
@@ -14,7 +13,6 @@ const MapBox = () => {
   const mapRef = useRef<mapboxgl.Map | null>(null);
   const locationsToDraw = [
     polygonFactory(polygons.fourSided),
-    labelPolygon(polygons.fourSided, 'my test')
   ]
 
   useEffect(() => {
@@ -61,7 +59,6 @@ const MapBox = () => {
   return (
     <>
       <div ref={mapContainerRef} id="map" style={{ height: '400px' }}></div>
-      <Controls />
     </>
   );
 };

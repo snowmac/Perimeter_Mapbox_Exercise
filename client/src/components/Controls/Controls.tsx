@@ -6,10 +6,10 @@ const ControlButton = styled(Button)`
     margin-left: 1.2rem;
 `;
 
-const Controls = () => {
+const Controls = ({sessionId, onSave, allData}) => {
     return (
         <Container sx={{padding: 1}}>
-            <ControlButton variant="outlined">View All</ControlButton>
+            <ControlButton variant="outlined">Clear</ControlButton>
             <ControlButton variant="outlined">Save</ControlButton>
             <ControlButton variant="outlined"><IosShareIcon/></ControlButton>
         </Container>
