@@ -55,33 +55,6 @@ const MapBox = () => {
         console.log('data', JSON.stringify(data.features[0].geometry.coordinates));
       }
 
-      mapRef.current.on('load', () => {
-        mapRef.current.addSource('places', {
-          type: 'geojson',
-          data: {
-            type: 'Feature Collection',
-            features: locationsToDraw
-          }
-        });
-  
-        mapRef.current.addLayer({
-          id: 'poi-labels',
-          type: 'symbol',
-          source: 'places',
-          layout: {
-            'text-field': ['get', 'description'],
-            'text-variable-anchor': ['top', 'bottom', 'left', 'right'],
-            'text-radial-offset': 0.5,
-            'text-justify': 'auto',
-            'icon-image': ['get', 'icon']
-          }
-        });
-  
-        mapRef.current.rotateTo(180, { duration: 10000 });
-      });
-  
-      return () => mapRef.current.remove();
-
     }
   }, []);
 
