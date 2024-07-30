@@ -1,4 +1,4 @@
-import { Feature } from './MapBoxTypes.tsx';
+import { Feature } from '../components/MapBox/MapBoxTypes.ts';
 
 export const polygonFactory = (coordinates: number[][][]): Feature => {
     const uuid = '1234'
@@ -12,6 +12,3 @@ export const polygonFactory = (coordinates: number[][][]): Feature => {
         }
     };
 }
-
-
-

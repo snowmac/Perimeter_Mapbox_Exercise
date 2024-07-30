@@ -1,7 +1,7 @@
 import Container from '@mui/material/Container';
 import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
-import MapBox from './MapBox/MapBox.tsx';
+import MapBox from './components/MapBox/MapBox.tsx';
 
 export default function App() {
   return (

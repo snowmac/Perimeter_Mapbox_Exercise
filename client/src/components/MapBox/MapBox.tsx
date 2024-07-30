@@ -1,11 +1,11 @@
 import { useEffect, useRef } from 'react';
 import mapboxgl from 'mapbox-gl';
 import MapboxDraw from '@mapbox/mapbox-gl-draw';
-import { polygonFactory } from './util';
+import { polygonFactory } from '@utils/util.ts';
 
 import 'mapbox-gl/dist/mapbox-gl.css';
 import '@mapbox/mapbox-gl-draw/dist/mapbox-gl-draw.css';
-import Controls from './Controls.tsx';
+import Controls from '../Controls/Controls.tsx';
 
 const fakeOne = [[[-91.89339773559622,42.77310422996243],[-91.84086935424874,42.76264469821865],[-91.87708990478572,42.75306574667144],[-91.89339773559622,42.77310422996243]]];
 
