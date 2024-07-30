@@ -1,7 +1,7 @@
 import { describe, it, expect } from 'vitest';
 import { polygonFactory } from './util.ts';
 import { Feature } from '@components/MapBox/MapBoxTypes.ts';
-import data from './mockdata.ts'; 
+import { polygons } from './mockdata.ts'; 
 
 describe('polygonFactory', () => {
     it('should create a basic Feature object with fake coordinates', () => {
@@ -35,12 +35,12 @@ describe('polygonFactory', () => {
             type: 'Feature',
             properties: {},
             geometry: {
-                coordinates: data.polygons.threeSided,
+                coordinates: polygons.fourSided,
                 type: 'Polygon'
             }
         };
 
-        const result = polygonFactory(data.polygons.threeSided);
+        const result = polygonFactory(polygons.fourSided);
 
         expect(result).toEqual(expectedFeature);
     });    
