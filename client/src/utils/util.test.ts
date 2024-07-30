@@ -3,7 +3,6 @@ import { polygonFactory, labelPolygon } from './util.ts';
 import { Feature } from '@components/MapBox/MapBoxTypes.ts';
 import { polygons } from './mockdata.ts';
 
-
 vi.mock('nanoid', () => ({
     nanoid: () => '1234'
 }));
@@ -64,10 +63,8 @@ describe('polygonFactory', () => {
         ];
         const label = 'Center Label';
 
-        // Call the function
         const result: Feature = labelPolygon(coordinates, label);
 
-        // Define the expected result
         const expectedFeature: Feature = {
             id: '1234',
             type: 'Feature',

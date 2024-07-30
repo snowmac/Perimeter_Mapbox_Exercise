@@ -1,7 +1,7 @@
 import { useEffect, useRef } from 'react';
 import mapboxgl from 'mapbox-gl';
 import MapboxDraw from '@mapbox/mapbox-gl-draw';
-import { polygonFactory } from '@utils/util.ts';
+import { polygonFactory, labelPolygon } from '@utils/util.ts';
 import { polygons } from '@utils/mockdata.ts';
 
 import 'mapbox-gl/dist/mapbox-gl.css';
@@ -12,6 +12,10 @@ import Controls from '../Controls/Controls.tsx';
 const MapBox = () => {
   const mapContainerRef = useRef<HTMLDivElement>(null);
   const mapRef = useRef<mapboxgl.Map | null>(null);
+  const locationsToDraw = [
+    polygonFactory(polygons.fourSided),
+    labelPolygon(polygons.fourSided, 'my test')
+  ]
 
   useEffect(() => {
     mapboxgl.accessToken = 'pk.eyJ1IjoiYWRhbWJvdXJnIiwiYSI6ImNsejNxbDRmajBic2MyaXExN2hrMm1udTcifQ.AT2bCOKyUAwyW8mywMmzug';
@@ -37,7 +41,9 @@ const MapBox = () => {
       });
       map.addControl(draw);
 
-      draw.add(polygonFactory(polygons.fourSided))
+      if(locationsToDraw) {
+        locationsToDraw.forEach(item => draw.add(item))
+      }
 
       map.on('draw.create', updateArea);
       map.on('draw.delete', updateArea);
@@ -48,6 +54,34 @@ const MapBox = () => {
         const data = draw.getAll();
         console.log('data', JSON.stringify(data.features[0].geometry.coordinates));
       }
+
+      mapRef.current.on('load', () => {
+        mapRef.current.addSource('places', {
+          type: 'geojson',
+          data: {
+            type: 'Feature Collection',
+            features: locationsToDraw
+          }
+        });
+  
+        mapRef.current.addLayer({
+          id: 'poi-labels',
+          type: 'symbol',
+          source: 'places',
+          layout: {
+            'text-field': ['get', 'description'],
+            'text-variable-anchor': ['top', 'bottom', 'left', 'right'],
+            'text-radial-offset': 0.5,
+            'text-justify': 'auto',
+            'icon-image': ['get', 'icon']
+          }
+        });
+  
+        mapRef.current.rotateTo(180, { duration: 10000 });
+      });
+  
+      return () => mapRef.current.remove();
+
     }
   }, []);
 

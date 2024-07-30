@@ -26,7 +26,6 @@ export const labelPolygon = (coordinates: number[][][], label: string): Feature 
     const centerPoints = centroid(poly);
 
     return {
-        "id": uuid,
         "type": "Feature",
         "properties": {
             "description": label
