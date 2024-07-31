@@ -1,6 +1,6 @@
 const { gql } = require('apollo-server');
 
-export const polygonTypeDefs = gql`
+export default gql`
   type Polygon {
     id: Int!
     name: String!

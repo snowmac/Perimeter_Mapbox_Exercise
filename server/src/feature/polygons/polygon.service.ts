@@ -10,6 +10,7 @@ export const getOnePolygon = async (_, {id}) => {
     return await prisma.polygon.findUnique({ where: { id: id } });
 }
 
+// TODO: don't dump data destructure it 
 export const createPolygon = async (_, {data}) => {
     return await prisma.polygon.create(data);
 }
