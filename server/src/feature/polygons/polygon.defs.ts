@@ -15,7 +15,7 @@ export const polygonTypeDefs = gql`
 
   type Query {
     polygon(id: Int!): Polygon
-    polygons: [Polygon!]!
+    polygons(sessionId: String!): [Polygon!]!
   }
 
   type Mutation {
