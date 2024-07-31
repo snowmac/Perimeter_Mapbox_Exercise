@@ -13,11 +13,12 @@
   "description": "",
   "type": "module",
   "dependencies": {
+    "@apollo/server": "^4.10.5",
     "@prisma/client": "^5.17.0",
-    "fastify": "^4.28.1"
+    "graphql": "^16.9.0"
   },
   "devDependencies": {
-    "@types/node": "^20.14.13",
+    "@types/node": "^20.14.12",
     "prisma": "^5.17.0",
     "ts-node": "^10.9.2",
     "typescript": "^5.5.4"
