@@ -14,9 +14,11 @@
   "type": "module",
   "dependencies": {
     "@apollo/server": "^4.10.5",
+    "@graphql-tools/schema": "^10.0.4",
     "@prisma/client": "^5.17.0",
     "graphql": "^16.9.0",
-    "nanoid": "^5.0.7"
+    "nanoid": "^5.0.7",
+    "vitest": "^2.0.5"
   },
   "devDependencies": {
     "@types/graphql": "^14.5.0",

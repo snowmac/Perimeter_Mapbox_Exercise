@@ -1,9 +1,9 @@
-const { gql } = require('apollo-server');
+import gql from 'graphql-tag';
 
 export default gql`
   type WorkSession {
     id: String
-    ploygons: [Ploygon!]!
+    polygon: [Polygon!]!
   }
 
   type Query {
@@ -11,6 +11,6 @@ export default gql`
   }
 
   type Mutation {
-    createSession(): WorkSession
+    createSession: WorkSession
   }
 `;
