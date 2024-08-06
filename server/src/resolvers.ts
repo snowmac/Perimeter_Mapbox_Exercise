@@ -1,7 +1,7 @@
-import polygonResolver from './feature/polygons/ploygon.resolvers';
+import polygonResolver from './feature/polygons/polygon';
 import workSessionResolver from './feature/workSession/workSession.resolvers'; 
 
-// aggergate resolvers into one include file from the feature collection
+// aggregate resolvers into one include file from the feature collection
 export default {
     Query: {
         ...polygonResolver.Query,
