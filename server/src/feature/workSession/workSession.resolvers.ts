@@ -12,8 +12,8 @@ export default {
         createSession: async () => {
             return await prisma.workSession.create({
                 data: {
-                    created_at: Date.now().toLocaleString(),
-                    updated_at: Date.now().toLocaleString(),
+                    created_at: new Date().toISOString(),
+                    updated_at: new Date().toISOString(),
                 }
             }); 
         },

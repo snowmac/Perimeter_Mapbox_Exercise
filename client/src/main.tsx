@@ -11,8 +11,7 @@ import theme from "./theme.tsx";
 import App from "./App.tsx";
 
 const client = new ApolloClient({
-  uri: "localhost:4000",
-
+  uri: process.env.REACT_APP_GRAPHQL_URI || "http://localhost:4000",
   cache: new InMemoryCache(),
 });
 
