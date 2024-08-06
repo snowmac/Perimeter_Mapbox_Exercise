@@ -12,6 +12,7 @@
     "start": "vite"
   },
   "dependencies": {
+    "@apollo/client": "^3.11.3",
     "@emotion/react": "^11.13.0",
     "@emotion/styled": "^11.13.0",
     "@fontsource/roboto": "^5.0.13",
@@ -20,6 +21,7 @@
     "@mui/material": "^5.16.5",
     "@turf/turf": "^7.0.0",
     "@types/mapbox__mapbox-gl-draw": "^1.4.6",
+    "graphql": "^16.9.0",
     "mapbox-gl": "^3.5.2",
     "nanoid": "^5.0.7",
     "react": "^18.3.1",

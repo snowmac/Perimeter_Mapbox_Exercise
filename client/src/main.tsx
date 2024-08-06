@@ -1,15 +1,28 @@
-import * as React from 'react';
-import * as ReactDOM from 'react-dom/client';
-import { ThemeProvider } from '@emotion/react';
-import { CssBaseline } from '@mui/material';
-import theme from './theme.tsx';
-import App from './App.tsx';
+import * as React from "react";
+import * as ReactDOM from "react-dom/client";
+import { ThemeProvider } from "@emotion/react";
+import { CssBaseline } from "@mui/material";
+import {
+  ApolloClient,
+  InMemoryCache,
+  ApolloProvider,
+} from "@apollo/client";
+import theme from "./theme.tsx";
+import App from "./App.tsx";
 
-ReactDOM.createRoot(document.getElementById('root')!).render(
-  <React.StrictMode>
-    <ThemeProvider theme={theme}>
-      <CssBaseline />
-      <App />
-    </ThemeProvider>
-  </React.StrictMode>,
+const client = new ApolloClient({
+  uri: "localhost:4000",
+
+  cache: new InMemoryCache(),
+});
+
+ReactDOM.createRoot(document.getElementById("root")!).render(
+  <ApolloProvider client={client}>
+    <React.StrictMode>
+      <ThemeProvider theme={theme}>
+        <CssBaseline />
+        <App />
+      </ThemeProvider>
+    </React.StrictMode>
+  </ApolloProvider>
 );
