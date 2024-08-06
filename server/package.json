@@ -5,7 +5,8 @@
   "scripts": {
     "compile": "tsc",
     "start": "npm run compile && node ./dist/index.js",
-    "postinstall": "npm run compile"
+    "postinstall": "npm run compile",
+    "dev": "tsx index.ts"
   },
   "author": "",
   "license": "ISC",
@@ -25,7 +26,7 @@
     "@types/node": "^20.14.12",
     "apollo": "^2.34.0",
     "prisma": "^5.17.0",
-    "ts-node": "^10.9.2",
+    "tsx": "^4.16.5",
     "typescript": "^5.5.4"
   }
 }
