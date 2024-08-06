@@ -1,12 +1,11 @@
 import { vi, describe, it, expect } from 'vitest';
-import { polygonFactory, labelPolygon } from './util.ts';
+import { polygonFactory, labelPolygon, getSessionID } from './util.ts';
 import { Feature } from '@components/MapBox/MapBoxTypes.ts';
 import { polygons } from './mockdata.ts';
 
 vi.mock('nanoid', () => ({
     nanoid: () => '1234'
 }));
-
 
 describe('polygonFactory', () => {
     it('should create a basic Feature object with fake coordinates', () => {
@@ -79,5 +78,37 @@ describe('polygonFactory', () => {
 
         // Assert the result matches the expected feature
         expect(result).toEqual(expectedFeature);
-    })
+    });
+});
+
+
+describe('getSessionID tests', () => {
+    it('should get the session ID from a fake cookie', () => {
+        // Mocking the 'js-cookie' library to return a fake session ID
+        vi.mock('js-cookie', () => ({
+            get: () => 'fakeSessionID'
+        }));
+
+        const result = getSessionID();
+
+        expect(result).toBe('fakeSessionID');
+    });
+
+    it('should get the session ID from a fake mutation', () => {
+        // Mocking the '@apollo/client' library to return a fake session ID
+        vi.mock('@apollo/client', () => ({
+            useMutation: () => [
+                () => ({
+                    data: {
+                        sessionID: 'fakeSessionID'
+                    }
+                }),
+                {}
+            ]
+        }));
+
+        const result = getSessionID();
+
+        expect(result).toBe('fakeSessionID');
+    });
 });

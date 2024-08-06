@@ -6,9 +6,16 @@ import { polygons } from '@utils/mockdata.ts';
 
 import 'mapbox-gl/dist/mapbox-gl.css';
 import '@mapbox/mapbox-gl-draw/dist/mapbox-gl-draw.css';
+import mapboxgl from 'mapbox-gl';
+import mapboxgl from 'mapbox-gl';
 
 
-const MapBox = () => {
+const MapBox = ({
+  onCreate,
+  onUpdate, 
+  onDelete,
+  data
+}) => {
   const mapContainerRef = useRef<HTMLDivElement>(null);
   const mapRef = useRef<mapboxgl.Map | null>(null);
   const locationsToDraw = [
@@ -16,7 +23,7 @@ const MapBox = () => {
   ]
 
   useEffect(() => {
-    mapboxgl.accessToken = 'pk.eyJ1IjoiYWRhbWJvdXJnIiwiYSI6ImNsejNxbDRmajBic2MyaXExN2hrMm1udTcifQ.AT2bCOKyUAwyW8mywMmzug';
+    mapboxgl.accessToken = import.meta.env.VITE_MAPBOX_API_KEY;
 
     if (mapContainerRef.current) {
       // Initialize map and assign to mapRef
@@ -43,14 +50,14 @@ const MapBox = () => {
         locationsToDraw.forEach(item => draw.add(item))
       }
 
-      map.on('draw.create', updateArea);
-      map.on('draw.delete', updateArea);
-      map.on('draw.update', updateArea);
-
-      function updateArea(e: mapboxgl.MapEvent) {
+      map.on('draw.create', (e) => onCreate(drawData(e)));
+      map.on('draw.delete', (e) => onDelete(drawData(e)));
+      map.on('draw.update', (e) => onUpdate(drawData(e)));
+      
+      function drawData(e: mapboxgl.MapEvent) {
         if (!mapRef.current) return;
         const data = draw.getAll();
-        console.log('data', JSON.stringify(data.features[0].geometry.coordinates));
+        return data;
       }
 
     }

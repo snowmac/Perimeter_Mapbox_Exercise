@@ -7,6 +7,9 @@
       ],
       "@utils/*": [
         "src/utils/*"
+      ],
+      "@graphql": [
+        "src/graphql"
       ]
     }
   },
