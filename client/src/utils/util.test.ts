@@ -2,6 +2,7 @@ import { vi, describe, it, expect } from 'vitest';
 import { polygonFactory, labelPolygon, getSessionID } from './util.ts';
 import { Feature } from '@components/MapBox/MapBoxTypes.ts';
 import { polygons } from './mockdata.ts';
+import { gql } from '@apollo/client';
 
 vi.mock('nanoid', () => ({
     nanoid: () => '1234'
@@ -86,7 +87,9 @@ describe('getSessionID tests', () => {
     it('should get the session ID from a fake cookie', () => {
         // Mocking the 'js-cookie' library to return a fake session ID
         vi.mock('js-cookie', () => ({
-            get: () => 'fakeSessionID'
+            default: {
+                get: () => 'fakeSessionID'
+            }
         }));
 
         const result = getSessionID();
@@ -97,6 +100,7 @@ describe('getSessionID tests', () => {
     it('should get the session ID from a fake mutation', () => {
         // Mocking the '@apollo/client' library to return a fake session ID
         vi.mock('@apollo/client', () => ({
+            gql: () => {},
             useMutation: () => [
                 () => ({
                     data: {

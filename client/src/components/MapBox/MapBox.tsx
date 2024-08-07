@@ -6,8 +6,6 @@ import { polygons } from '@utils/mockdata.ts';
 
 import 'mapbox-gl/dist/mapbox-gl.css';
 import '@mapbox/mapbox-gl-draw/dist/mapbox-gl-draw.css';
-import mapboxgl from 'mapbox-gl';
-import mapboxgl from 'mapbox-gl';
 
 
 const MapBox = ({

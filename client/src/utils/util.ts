@@ -3,7 +3,7 @@ import { nanoid } from "nanoid";
 import { polygon, centroid } from "@turf/turf";
 import Cookies from 'js-cookie'
 import { Feature } from "../components/MapBox/MapBoxTypes.ts";
-import { mutations } from "@graphql";
+import { mutations } from "@src/graphql";
 
 export const polygonFactory = (coordinates: number[][][]): Feature => {
   const uuid = nanoid();
