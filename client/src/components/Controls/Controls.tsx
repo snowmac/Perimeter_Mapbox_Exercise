@@ -8,10 +8,12 @@ const ControlButton = styled(Button)`
   margin-left: 1.2rem;
 `;
 
-const Controls = ({ sessionId, onSave, clearPoints, name = "" }) => {
+const Controls = ({ sessionId, onSave, name = "" }) => {
   const [nameChanged, setNameChanged] = useState(name);
   const [showShareLink, setShowShareLink] = useState(false);
-  const shareUrl = new URL(sessionId, window.location.href);
+  
+  const shareUrl = new URL(window.location.href);
+  shareUrl.searchParams.append("sessionId", sessionId);
 
   const handleSave = () => {
     if (nameChanged) {
@@ -31,12 +33,10 @@ const Controls = ({ sessionId, onSave, clearPoints, name = "" }) => {
         value={nameChanged}
       />
 
-      <ControlButton variant="outlined" onClick={clearPoints}>
-        Clear
-      </ControlButton>
       <ControlButton variant="outlined" onClick={handleSave}>
         Save
       </ControlButton>
+
       <ControlButton
         variant="outlined"
         onClick={() => setShowShareLink(!showShareLink)}

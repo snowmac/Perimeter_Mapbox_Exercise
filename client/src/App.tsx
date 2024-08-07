@@ -7,15 +7,22 @@ import { queries, mutations } from "@src/graphql";
 import { useEffect, useState } from "react";
 import Cookies from "js-cookie";
 
-// should wrap all this logic into a service 
+// should wrap all this logic into a service
 // should wrap this out of app and into a separate HOC
 export default function App() {
   const [sessionId, setSessionId] = useState("");
-  // TODO: Stuff cookie name into config
-  // undefined or string id
-  const weHaveSessionCookie = Cookies.get("work-session-id");
+  const [showControls, setShowControls] = useState(false);
+  // the polygon exists on the map but does not exist in the DB yet
+  const [createdButNotSavedPolygon, setCreatedButNotSavedPolygon] = useState(
+    {}
+  );
 
+  const weHaveSessionCookie = Cookies.get("work-session-id");
   const [initWorkSession] = useMutation(mutations.INIT_WORK_SESSION);
+  const [savePolygon] = useMutation(mutations.CREATE_POLYGON);
+
+  const searchParams = new URLSearchParams(window.location.search);
+  const urlSessionId = searchParams.get("sessionId");
 
   useEffect(() => {
     const fetchData = async () => {
@@ -26,30 +33,37 @@ export default function App() {
       } = await initWorkSession();
       // TODO: wrap into something like a helper
       const in30Minutes = 1 / 48;
+      // I expire the cookie in 30 minutes for better / easier testing
       Cookies.set("work-session-id", sessionId, { expires: in30Minutes });
       setSessionId(sessionId);
     };
 
-    // undefined cookie, go get the data and set the session id
-    if (!weHaveSessionCookie) {
-      fetchData();
+    // check if sessionId exists in the URL
+    if (urlSessionId) {
+      setSessionId(urlSessionId);
     } else {
-      setSessionId(weHaveSessionCookie);
+      // undefined cookie, go get the data and set the session id
+      if (!weHaveSessionCookie) {
+        fetchData();
+      } else {
+        setSessionId(weHaveSessionCookie);
+      }
     }
   }, []);
 
+  // get any existing polygons
   const { data: existingPolygons } = useQuery(queries.GET_ALL_BY_SESSION_ID, {
     variables: {
       sessionId,
     },
   });
 
+  // we created one but not given it any name / saved it.
+  // its in a todo state
   const onCreate = (item: any) => {
-    alert("onCreate!");
-    console.log(JSON.stringify(item));
-    // const { data } = useMutation();
-    console.log(sessionId);
+    setCreatedButNotSavedPolygon(item);
   };
+
   const onUpdate = (item: any) => {
     alert("onUpdate!");
     console.log(item);
@@ -60,13 +74,25 @@ export default function App() {
   };
 
   const clearPoints = (item: any) => {};
-  const onSave = (item: any) => {
-    alert("onSave!");
-    console.log(item);
+
+  const onSave = async (item: any) => {
+    try {
+      const { data } = await savePolygon({
+        variables: {
+          sessionId,
+          polygon: item,
+        },
+      });
+      console.log("Polygon saved:", data);
+      // Reset the createdButNotSavedPolygon state
+      setCreatedButNotSavedPolygon({});
+    } catch (error) {
+      console.error("Error saving polygon:", error);
+    }
   };
 
   return (
-    <Container maxWidth="sm">
+    <Container maxWidth="md">
       <Box sx={{ my: 4 }}>
         <MapBox
           onCreate={onCreate}

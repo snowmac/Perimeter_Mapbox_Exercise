@@ -55,7 +55,7 @@ const MapBox = ({ onCreate, onUpdate, onDelete, data }) => {
 
   return (
     <>
-      <div ref={mapContainerRef} id="map" style={{ height: "400px" }}></div>
+      <div ref={mapContainerRef} id="map" style={{ height: "400px", width: "700px" }}></div>
     </>
   );
 };
