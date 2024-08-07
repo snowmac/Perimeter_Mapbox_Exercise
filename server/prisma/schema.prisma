@@ -20,14 +20,12 @@ model Polygon {
     properties Json
     mapbox_id String
     work_session_id String
-    work_session WorkSession @relation(fields: [work_session_id], references: [id])
     updated_at DateTime
     created_at DateTime
 }
 
 model WorkSession {
     id String @id @default(uuid())
-    polygons Polygon[]
     updated_at DateTime
     created_at DateTime
 }

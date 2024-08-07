@@ -1,6 +1,6 @@
 import { PrismaClient } from "@prisma/client";
 
-// TODO: extract into reusable types 
+// TODO: extract into reusable types
 type Polygon = {
   id: number;
   name: string;
@@ -14,7 +14,10 @@ type Polygon = {
 
 const prisma = new PrismaClient();
 
-export const getAllPolygonsBySession = async (_, { sessionId }: {sessionId: string}) => {
+export const getAllPolygonsBySession = async (
+  _,
+  { sessionId }: { sessionId: string }
+) => {
   return await prisma.polygon.findMany({
     where: { work_session_id: sessionId },
   });
@@ -24,15 +27,34 @@ export const getOnePolygon = async (_, { id }) => {
   return await prisma.polygon.findUnique({ where: { id: id } });
 };
 
-export const createPolygon = async (_, { data }: { data: Polygon }) => {
+export const createPolygon = async (
+  _,
+  {
+    name,
+    coordinates,
+    properties,
+    mapboxId,
+    workSessionId,
+  }: {
+    name: string;
+    coordinates: string;
+    properties: any;
+    mapboxId: string;
+    workSessionId: string;
+  }
+) => {
+  // Ensure that workSessionId is a valid value
+  if (!workSessionId) {
+    throw new Error("Invalid workSessionId");
+  }
+
   return await prisma.polygon.create({
     data: {
-      id: data.id,
-      name: data.name,
-      coordinates: data.coordinates,
-      properties: data.properties,
-      mapbox_id: data.mapbox_id,
-      work_session_id: data.work_session_id,
+      name: name,
+      coordinates: coordinates,
+      properties: properties,
+      mapbox_id: mapboxId,
+      work_session_id: workSessionId,
       updated_at: new Date(),
       created_at: new Date(),
     },

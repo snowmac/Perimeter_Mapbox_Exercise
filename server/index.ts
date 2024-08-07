@@ -6,11 +6,11 @@ import typeDefs from './src/typedefs.ts';
 
 const server = new ApolloServer({
   typeDefs,
-  resolvers,
+  resolvers
 });
 
 const startServer = async () => {
-  const { url } = await startStandaloneServer(server, { listen: { port: 4000 } });
+  const { url } = await startStandaloneServer(server, { listen: { port: 4000 }});
   console.log(`🚀 Server listening at: ${url}`);
 };
 
