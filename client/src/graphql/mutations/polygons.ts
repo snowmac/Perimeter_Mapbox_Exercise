@@ -9,11 +9,21 @@ export const DELETE_POLYGON = gql`
 `;
 
 export const CREATE_POLYGON = gql`
-  mutation createPolygon($input: PolygonInput!) {
-    createPolygon(input: $input) {
+  mutation CreatePolygon(
+    $name: String!
+    $coordinates: String!
+    $properties: String!
+    $mapboxId: String!
+    $workSessionId: String!
+  ) {
+    createPolygon(
+      name: $name
+      coordinates: $coordinates
+      properties: $properties
+      mapbox_id: $mapboxId
+      work_session_id: $workSessionId
+    ) {
       id
-      name
-      coordinates
     }
   }
 `;

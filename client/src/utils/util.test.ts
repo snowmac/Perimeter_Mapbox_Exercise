@@ -80,38 +80,3 @@ describe('polygonFactory', () => {
         expect(result).toEqual(expectedFeature);
     });
 });
-
-
-describe('getSessionID tests', () => {
-    it('should get the session ID from a fake cookie', () => {
-        // Mocking the 'js-cookie' library to return a fake session ID
-        vi.mock('js-cookie', () => ({
-            default: {
-                get: () => 'fakeSessionID'
-            }
-        }));
-
-        const result = getSessionID();
-
-        expect(result).toBe('fakeSessionID');
-    });
-
-    it('should get the session ID from a fake mutation', () => {
-        // Mocking the '@apollo/client' library to return a fake session ID
-        vi.mock('@apollo/client', () => ({
-            gql: () => {},
-            useMutation: () => [
-                () => ({
-                    data: {
-                        sessionID: 'fakeSessionID'
-                    }
-                }),
-                {}
-            ]
-        }));
-
-        const result = getSessionID();
-
-        expect(result).toBe('fakeSessionID');
-    });
-});

@@ -4,52 +4,18 @@ import Box from "@mui/material/Box";
 import MapBox from "@components/MapBox/MapBox.tsx";
 import Controls from "@components/Controls/Controls";
 import { queries, mutations } from "@src/graphql";
-import { useEffect, useState } from "react";
-import Cookies from "js-cookie";
+import { useState } from "react";
+import { useWorkSession } from "@src/hooks/useWorkSession.ts"; 
 
 // should wrap all this logic into a service
 // should wrap this out of app and into a separate HOC
 export default function App() {
-  const [sessionId, setSessionId] = useState("");
+  const sessionId = useWorkSession(); 
   const [showControls, setShowControls] = useState(false);
   // the polygon exists on the map but does not exist in the DB yet
-  const [createdButNotSavedPolygon, setCreatedButNotSavedPolygon] = useState(
-    {}
-  );
+  const [unsavedPolygons, setUnsavedPolygons] = useState([]);
 
-  const weHaveSessionCookie = Cookies.get("work-session-id");
-  const [initWorkSession] = useMutation(mutations.INIT_WORK_SESSION);
   const [savePolygon] = useMutation(mutations.CREATE_POLYGON);
-
-  const searchParams = new URLSearchParams(window.location.search);
-  const urlSessionId = searchParams.get("sessionId");
-
-  useEffect(() => {
-    const fetchData = async () => {
-      const {
-        data: {
-          createSession: { id: sessionId },
-        },
-      } = await initWorkSession();
-      // TODO: wrap into something like a helper
-      const in30Minutes = 1 / 48;
-      // I expire the cookie in 30 minutes for better / easier testing
-      Cookies.set("work-session-id", sessionId, { expires: in30Minutes });
-      setSessionId(sessionId);
-    };
-
-    // check if sessionId exists in the URL
-    if (urlSessionId) {
-      setSessionId(urlSessionId);
-    } else {
-      // undefined cookie, go get the data and set the session id
-      if (!weHaveSessionCookie) {
-        fetchData();
-      } else {
-        setSessionId(weHaveSessionCookie);
-      }
-    }
-  }, []);
 
   // get any existing polygons
   const { data: existingPolygons } = useQuery(queries.GET_ALL_BY_SESSION_ID, {
@@ -61,7 +27,8 @@ export default function App() {
   // we created one but not given it any name / saved it.
   // its in a todo state
   const onCreate = (item: any) => {
-    setCreatedButNotSavedPolygon(item);
+    console.log(JSON.stringify(item))
+    
   };
 
   const onUpdate = (item: any) => {
@@ -79,8 +46,11 @@ export default function App() {
     try {
       const { data } = await savePolygon({
         variables: {
-          sessionId,
-          polygon: item,
+          workSessionId: sessionId,
+          name: item.name,
+          coordinates: createdButNotSavedPolygon,
+          properties: createdButNotSavedPolygon,
+          mapboxId: createdButNotSavedPolygon, 
         },
       });
       console.log("Polygon saved:", data);

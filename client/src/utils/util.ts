@@ -1,6 +1,9 @@
 import { nanoid } from "nanoid";
 import { polygon, centroid } from "@turf/turf";
-import { Feature } from "../components/MapBox/MapBoxTypes.ts";
+import {
+  Feature,
+  FeatureCollectionType,
+} from "../components/MapBox/MapBoxTypes.ts";
 
 export const polygonFactory = (coordinates: number[][][]): Feature => {
   const uuid = nanoid();
@@ -39,4 +42,18 @@ export const labelPolygon = (
       type: "Point",
     },
   };
+};
+
+export const extractDbObjectFromMapBoxObject = (
+  mapboxObject: FeatureCollectionType,
+  sessionId: string
+) => {
+  return mapboxObject?.features?.map((feature: Feature) => {
+    return {
+      coordinates: JSON.stringify(feature?.geometry?.coordinates),
+      properties: JSON.stringify(feature?.properties),
+      mapboxId: feature?.id,
+      workSessionId: sessionId,
+    };
+  });
 };
