@@ -2,7 +2,6 @@ import { vi, describe, it, expect } from 'vitest';
 import { polygonFactory, labelPolygon, getSessionID } from './util.ts';
 import { Feature } from '@components/MapBox/MapBoxTypes.ts';
 import { polygons } from './mockdata.ts';
-import { gql } from '@apollo/client';
 
 vi.mock('nanoid', () => ({
     nanoid: () => '1234'

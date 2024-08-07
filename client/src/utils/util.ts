@@ -1,9 +1,6 @@
-import { useMutation } from "@apollo/client";
 import { nanoid } from "nanoid";
 import { polygon, centroid } from "@turf/turf";
-import Cookies from 'js-cookie'
 import { Feature } from "../components/MapBox/MapBoxTypes.ts";
-import { mutations } from "@src/graphql";
 
 export const polygonFactory = (coordinates: number[][][]): Feature => {
   const uuid = nanoid();
@@ -42,16 +39,4 @@ export const labelPolygon = (
       type: "Point",
     },
   };
-};
-
-export const getSessionID = () => {
-  const cName = 'work-session-id'; 
-  const cookieValue = Cookies.get(cName);
-  if(cookieValue) {
-    return cookieValue;
-  } else {
-    const sessionId = useMutation(mutations.INIT_WORK_SESSION);
-    Cookies.set(cName, sessionId);
-    return sessionId;
-  }
 };
