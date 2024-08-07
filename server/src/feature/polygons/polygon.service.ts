@@ -61,13 +61,13 @@ export const createPolygon = async (
   });
 };
 
-export const updatePolygon = async (_, { data }: { data: Polygon }) => {
+export const updatePolygon = async (_, { id, name, coordinates, properties }) => {
   return await prisma.polygon.update({
-    where: { id: data.id },
+    where: { id },
     data: {
-      name: data.name,
-      coordinates: data.coordinates,
-      properties: data.properties,
+      name: name,
+      coordinates: coordinates,
+      properties: properties,
       updated_at: new Date(),
     },
   });
@@ -81,5 +81,7 @@ export const deletePolygon = async (_, { id }) => {
   const polygons = await prisma.polygon.findMany({ where: { mapbox_id: id } });
   const ids = polygons.map((polygon) => polygon.id);
 
-  return await prisma.polygon.deleteMany({ where: { id: { in: ids } } });
+  const result = await prisma.polygon.deleteMany({ where: { id: { in: ids } } });
+
+  return result;
 };

@@ -36,6 +36,6 @@ export default gql`
       work_session_id: String
     ): Polygon!
 
-    deletePolygon(id: Int!): Polygon!
+    deletePolygon(id: String!): Polygon!
   }
 `;

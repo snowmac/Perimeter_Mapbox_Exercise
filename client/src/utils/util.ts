@@ -5,13 +5,13 @@ import {
   FeatureCollectionType,
 } from "../components/MapBox/MapBoxTypes.ts";
 
-export const polygonFactory = (coordinates: number[][][]): Feature => {
-  const uuid = nanoid();
+export const polygonFactory = (coordinates: number[][][], properties = {}, id = null): Feature => {
+  const uuid = id || nanoid();
 
   return {
     id: uuid,
     type: "Feature",
-    properties: {},
+    properties: properties,
     geometry: {
       coordinates: coordinates,
       type: "Polygon",

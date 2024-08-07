@@ -2,19 +2,29 @@ import { useEffect, useRef } from "react";
 import mapboxgl from "mapbox-gl";
 import MapboxDraw from "@mapbox/mapbox-gl-draw";
 import { polygonFactory, labelPolygon } from "@utils/util.ts";
-import { polygons } from "@utils/mockdata.ts";
 
 import "mapbox-gl/dist/mapbox-gl.css";
 import "@mapbox/mapbox-gl-draw/dist/mapbox-gl-draw.css";
 
-const MapBox = ({ onCreate, onUpdate, onDelete, data }) => {
+const MapBox = ({ onCreate, onUpdate, onDelete, data }: {
+  onCreate: (e: mapboxgl.MapboxDrawCreateEvent) => void,
+  onUpdate: (e: mapboxgl.MapboxDrawUpdateEvent) => void,
+  onDelete: (e: mapboxgl.MapboxDrawDeleteEvent) => void,
+  data: any
+}) => {
   const mapContainerRef = useRef<HTMLDivElement>(null);
   const mapRef = useRef<mapboxgl.Map | null>(null);
-  const locationsToDraw = [];
 
   useEffect(() => {
-    mapboxgl.accessToken =
-      import.meta.env.VITE_MAPBOX_API_KEY;
+    const locationsToDraw = data?.polygons?.map((polygon) =>
+      polygonFactory(
+        JSON.parse(polygon.coordinates),
+        JSON.parse(polygon.properties),
+        polygon.mapboxId
+      )
+    );
+
+    mapboxgl.accessToken = import.meta.env.VITE_MAPBOX_API_KEY;
 
     if (mapContainerRef.current) {
       // Initialize map and assign to mapRef
@@ -37,25 +47,23 @@ const MapBox = ({ onCreate, onUpdate, onDelete, data }) => {
       });
       map.addControl(draw);
 
-      if (locationsToDraw) {
+      map.on("draw.create", (e) => onCreate(e));
+      map.on("draw.delete", (e) => onDelete(e));
+      map.on("draw.update", (e) => onUpdate(e));
+
+      if (mapRef.current && locationsToDraw) {
         locationsToDraw.forEach((item) => draw.add(item));
-      }
-
-      map.on("draw.create", (e) => onCreate(drawData(e)));
-      map.on("draw.delete", (e) => onDelete(drawData(e)));
-      map.on("draw.update", (e) => onUpdate(drawData(e)));
-
-      function drawData(e: mapboxgl.MapEvent) {
-        if (!mapRef.current) return;
-        const data = draw.getAll();
-        return data;
       }
     }
   }, []);
 
   return (
     <>
-      <div ref={mapContainerRef} id="map" style={{ height: "400px", width: "700px" }}></div>
+      <div
+        ref={mapContainerRef}
+        id="map"
+        style={{ height: "400px", width: "700px" }}
+      ></div>
     </>
   );
 };
