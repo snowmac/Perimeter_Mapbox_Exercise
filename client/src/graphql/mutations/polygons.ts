@@ -20,8 +20,8 @@ export const CREATE_POLYGON = gql`
       name: $name
       coordinates: $coordinates
       properties: $properties
-      mapbox_id: $mapboxId
-      work_session_id: $workSessionId
+      mapboxId: $mapboxId
+      workSessionId: $workSessionId
     ) {
       id
     }
