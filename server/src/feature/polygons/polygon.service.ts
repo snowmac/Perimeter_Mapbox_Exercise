@@ -74,14 +74,14 @@ export const updatePolygon = async (_, { id, name, coordinates, properties }) =>
 };
 
 export const deletePolygon = async (_, { id }) => {
-  // TODO: Tech debt
-  // we don't enforce uniqueness on the mapbox_id field, so we have to find many of those
-  // then delete them but theres probably only one id / object to delete
-  // but we wrote extra code because typescript was complaining
-  const polygons = await prisma.polygon.findMany({ where: { mapbox_id: id } });
-  const ids = polygons.map((polygon) => polygon.id);
+  let status = 'deleted';
 
-  const result = await prisma.polygon.deleteMany({ where: { id: { in: ids } } });
+  try {
+    await prisma.polygon.delete({ where: { id } }); 
+  } catch (error) {
+    console.error("Error deleting polygon:", error);
+    status = 'error';
+  }
 
-  return result;
+  return { status }; 
 };

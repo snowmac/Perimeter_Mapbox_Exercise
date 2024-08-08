@@ -1,6 +1,10 @@
 import gql from 'graphql-tag';
 
 export default gql`
+  type DeletedPolygon {
+    status: String!
+  }
+
   type Polygon {
     id: Int!
     name: String!
@@ -36,6 +40,6 @@ export default gql`
       work_session_id: String
     ): Polygon!
 
-    deletePolygon(id: String!): Polygon!
+    deletePolygon(id: Int!): DeletedPolygon!
   }
 `;

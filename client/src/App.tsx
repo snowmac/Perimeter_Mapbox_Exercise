@@ -53,14 +53,7 @@ export default function App() {
 
   const onDelete = (item: any) => {
     console.log('Deleting:', item);
-    const mapboxId = item.features[0].id;
-    // delete the unsaved polygon if it exists
-    const updatedUnsavedPolygons = unsavedPolygons.filter(
-      (polygon) => polygon.mapboxId !== mapboxId
-    );
-    setUnsavedPolygons(updatedUnsavedPolygons);
-
-    // delete the polygon from the DB
+    const mapboxId = item.features[0].properties.DbId;
     deletePolygon({ variables: { id: mapboxId } });
   };
 

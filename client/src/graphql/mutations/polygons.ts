@@ -1,9 +1,9 @@
 import { gql } from "@apollo/client";
 
 export const DELETE_POLYGON = gql`
-  mutation deletePolygon($id: String!) {
+  mutation deletePolygon($id: Int!) {
     deletePolygon(id: $id) {
-      id
+      status
     }
   }
 `;

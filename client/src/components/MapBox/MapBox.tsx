@@ -16,12 +16,16 @@ const MapBox = ({ onCreate, onUpdate, onDelete, data }: {
   const mapRef = useRef<mapboxgl.Map | null>(null);
 
   useEffect(() => {
-    const locationsToDraw = data?.polygons?.map((polygon) =>
-      polygonFactory(
+    const locationsToDraw = data?.polygons?.map((polygon) => {
+      const props = JSON.parse(polygon.properties);
+      props.DbId = polygon.id;
+      
+      return polygonFactory(
         JSON.parse(polygon.coordinates),
-        JSON.parse(polygon.properties),
+        props,
         polygon.mapboxId
-      )
+      );
+    }
     );
 
     mapboxgl.accessToken = import.meta.env.VITE_MAPBOX_API_KEY;
