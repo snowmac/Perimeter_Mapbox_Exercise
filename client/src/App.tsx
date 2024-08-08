@@ -39,6 +39,7 @@ export default function App() {
     setShowControls(true);
   };
 
+  // TODO: Call the update API and actually update the polygon
   const onUpdate = (item: any) => {
     const updatedItem = extractDbObjectFromMapBoxObject(item, sessionId);
     // we need to update the unsaved polygon
@@ -67,7 +68,6 @@ export default function App() {
     // probably a bad design
     // TODO: Tech debt- allow to select polygon then name it
     const polygon = unsavedPolygons[0];
-    console.log(polygon);
     try {
       const { data } = await savePolygon({
         variables: {
