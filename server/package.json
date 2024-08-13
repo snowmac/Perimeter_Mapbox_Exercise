@@ -6,7 +6,8 @@
     "compile": "tsc",
     "start": "npm run compile && node ./dist/index.js",
     "postinstall": "npm run compile",
-    "dev": "tsx index.ts"
+    "dev": "tsx index.ts",
+    "test": "vitest"
   },
   "author": "",
   "license": "ISC",
@@ -18,8 +19,7 @@
     "@graphql-tools/schema": "^10.0.4",
     "@prisma/client": "^5.17.0",
     "graphql": "^16.9.0",
-    "nanoid": "^5.0.7",
-    "vitest": "^2.0.5"
+    "nanoid": "^5.0.7"
   },
   "devDependencies": {
     "@types/graphql": "^14.5.0",
@@ -27,6 +27,20 @@
     "apollo": "^2.34.0",
     "prisma": "^5.17.0",
     "tsx": "^4.16.5",
-    "typescript": "^5.5.4"
+    "typescript": "^5.5.4",
+    "vitest": "^2.0.5"
+  },
+  "vitest": {
+    "test": {
+      "globals": true,
+      "environment": "node",
+      "include": [
+        "src/**/*.{test,spec}.ts"
+      ],
+      "exclude": [
+        "node_modules",
+        "dist"
+      ]
+    }
   }
 }
