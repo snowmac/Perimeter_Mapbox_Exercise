@@ -19,15 +19,19 @@ export default function App() {
 
   const [savePolygon] = useMutation(mutations.CREATE_POLYGON);
   const [deletePolygon] = useMutation(mutations.DELETE_POLYGON);
+  const [updatePolygon] = useMutation(mutations.UPDATE_POLYGON);
 
   // get any existing polygons
-  const { data: existingPolygons, loading } = useQuery(queries.GET_ALL_BY_SESSION_ID, {
-    variables: {
-      sessionId,
-    },
-  });
+  const { data: existingPolygons, loading } = useQuery(
+    queries.GET_ALL_BY_SESSION_ID,
+    {
+      variables: {
+        sessionId,
+      },
+    }
+  );
 
-  if(loading) return <p>Loading...</p>;
+  if (loading) return <p>Loading...</p>;
 
   // we created one but not given it any name / saved it.
   // its in a todo state
@@ -39,23 +43,34 @@ export default function App() {
     setShowControls(true);
   };
 
-  // TODO: Call the update API and actually update the polygon
   const onUpdate = (item: any) => {
     const updatedItem = extractDbObjectFromMapBoxObject(item, sessionId);
-    // we need to update the unsaved polygon
-    unsavedPolygons.forEach((polygon, index) => {
-      if (polygon.mapboxId === updatedItem[0].mapboxId) {
-        unsavedPolygons[index] = updatedItem[0];
+    const props = JSON.parse(updatedItem[0]?.properties)
+    const dbId = props?.DbId;
+
+    if(dbId) {
+      const newItem = {
+        ...updatedItem[0],
+        id: dbId,
+        isUpdated: true,
       }
-    });
-    setUnsavedPolygons(unsavedPolygons);
+      setUnsavedPolygons([newItem]);
+     } else {
+      // we need to update the unsaved polygon
+      unsavedPolygons.forEach((polygon, index) => {
+        if (polygon.mapboxId === updatedItem[0].mapboxId) {
+          unsavedPolygons[index] = updatedItem[0];
+        }
+      });
+      setUnsavedPolygons(unsavedPolygons);
+    }
     setShowControls(true);
   };
 
   const onDelete = (item: any) => {
-    console.log('Deleting:', item);
-    const mapboxId = item.features[0].properties.DbId;
-    deletePolygon({ variables: { id: mapboxId } });
+    console.log("Deleting:", item);
+    const dbId = item.features[0].properties.DbId;
+    deletePolygon({ variables: { id: dbId } });
   };
 
   const onSave = async (item: any) => {
@@ -68,16 +83,26 @@ export default function App() {
     // probably a bad design
     // TODO: Tech debt- allow to select polygon then name it
     const polygon = unsavedPolygons[0];
+
+    // set the common variables
+    const commonVars = {
+      workSessionId: sessionId,
+      name: item.name,
+      coordinates: polygon.coordinates,
+      properties: polygon.properties,
+      mapboxId: polygon.mapboxId,
+    };
+
+    // decide which mutation to use
+    const saveOrUpdatePolygon = polygon.isUpdated ? updatePolygon : savePolygon;
+
+    // decide which variables to use based on if the polygon is updated
+    const variables = polygon.isUpdated
+      ? { ...commonVars, id: polygon.id }
+      : commonVars;
+
     try {
-      const { data } = await savePolygon({
-        variables: {
-          workSessionId: sessionId,
-          name: item.name,
-          coordinates: polygon.coordinates,
-          properties: polygon.properties,
-          mapboxId: polygon.mapboxId,
-        },
-      });
+      const { data } = await saveOrUpdatePolygon({ variables });
       console.log("Polygon saved:", data);
       setUnsavedPolygons([]);
     } catch (error) {
