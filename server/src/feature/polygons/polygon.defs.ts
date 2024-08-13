@@ -36,8 +36,8 @@ export default gql`
       name: String
       coordinates: String
       properties: String
-      mapbox_id: String
-      work_session_id: String
+      mapboxId: String
+      workSessionId: String
     ): Polygon!
 
     deletePolygon(id: Int!): DeletedPolygon!

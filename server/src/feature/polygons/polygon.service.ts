@@ -1,15 +1,19 @@
 import { PrismaClient } from "@prisma/client";
 
 // TODO: extract into reusable types
+type IdField = {
+  id: number;
+};
+
 type Polygon = {
   id: number;
   name: string;
   coordinates: string;
   properties: any;
-  mapbox_id: string;
-  work_session_id: string;
-  updated_at: Date;
-  created_at: Date;
+  mapboxId: string;
+  workSessionId: string;
+  updatedAt: Date;
+  createdAt: Date;
 };
 
 const prisma = new PrismaClient();
@@ -23,25 +27,13 @@ export const getAllPolygonsBySession = async (
   });
 };
 
-export const getOnePolygon = async (_, { id }) => {
+export const getOnePolygon = async (_, { id }: IdField) => {
   return await prisma.polygon.findUnique({ where: { id: id } });
 };
 
 export const createPolygon = async (
   _,
-  {
-    name,
-    coordinates,
-    properties,
-    mapboxId,
-    workSessionId,
-  }: {
-    name: string;
-    coordinates: string;
-    properties: any;
-    mapboxId: string;
-    workSessionId: string;
-  }
+  { name, coordinates, properties, mapboxId, workSessionId }: Polygon
 ) => {
   // Ensure that workSessionId is a valid value
   if (!workSessionId) {
@@ -61,27 +53,31 @@ export const createPolygon = async (
   });
 };
 
-export const updatePolygon = async (_, { id, name, coordinates, properties }) => {
+export const updatePolygon = async (
+  _,
+  { id, name, coordinates, properties, mapboxId }: Polygon
+) => {
   return await prisma.polygon.update({
     where: { id },
     data: {
       name: name,
       coordinates: coordinates,
       properties: properties,
+      mapbox_id: mapboxId,
       updated_at: new Date(),
     },
   });
 };
 
-export const deletePolygon = async (_, { id }) => {
-  let status = 'deleted';
+export const deletePolygon = async (_, { id }: { id: IdField }) => {
+  let status = "deleted";
 
   try {
-    await prisma.polygon.delete({ where: { id } }); 
+    await prisma.polygon.delete({ where: { id } });
   } catch (error) {
     console.error("Error deleting polygon:", error);
-    status = 'error';
+    status = "error";
   }
 
-  return { status }; 
+  return { status };
 };
